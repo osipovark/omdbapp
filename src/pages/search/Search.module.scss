@@ -1,0 +1,18 @@
+@use "sass:color";
+
+@import "../../styles/variables";
+
+.input {
+  margin-top: 2.4rem;
+  width: 100%;
+  padding: 0.8rem 1.2em;
+  background-color: #1e4f62;
+  color: $text-color;
+  border: none;
+  border-radius: 1.6rem;
+  font-size: 1.6rem;
+}
+
+.input::placeholder {
+  color: darken($text-color, 20%);
+}
