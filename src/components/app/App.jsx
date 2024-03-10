@@ -3,7 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // import styles from "./App.module.scss";
 
 import Base from "../base/Base.jsx";
-import Home from "../../pages/home/Home.jsx";
+// import Home from "../../pages/home/Home.jsx";
+import Search from "../../pages/search/Search.jsx";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Search />,
       },
     ],
   },
