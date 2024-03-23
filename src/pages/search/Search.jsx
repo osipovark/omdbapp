@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-import { useDebounce } from "../../hooks/useDebounce";
+import { useParamsReducer } from "../../hooks/useParamsReducer";
 
 import styles from "./Search.module.scss";
 
@@ -8,29 +8,44 @@ const baseURL = "http://www.omdbapi.com/?apikey=";
 const key = "ab7333ba";
 
 function Search() {
-  const [searchString, setSearchString] = useState("");
-  const debouncedSearchString = useDebounce(searchString, 500);
+  const [searchParams, dispatch, totalResultsRef] = useParamsReducer();
+  const paramsString = searchParams.toString();
 
   useEffect(() => {
+    console.log(paramsString);
+
     const searchFilm = async () => {
-      const response = await fetch(
-        baseURL + key + `&s=${debouncedSearchString}`
-      );
-      const data = await response.json();
-      console.log(data);
+      try {
+        const response = await fetch(baseURL + key + `&${paramsString}`);
+        console.log(response);
+        const data = await response.json();
+        if (data.Response === "True") {
+          console.log(data);
+        } else {
+          throw new Error(data.Error);
+        }
+      } catch (err) {
+        console.warn(err.message);
+      }
     };
 
     searchFilm();
-  }, [debouncedSearchString]);
+  }, [paramsString, totalResultsRef]);
 
   return (
     <>
       <input
-        className={styles.input}
-        type="text"
+        className={styles.searchStringInput}
+        type="search"
         placeholder="Search film by it's title..."
-        value={searchString}
-        onChange={(event) => setSearchString(event.target.value)}
+        name="s"
+        defaultValue={searchParams.get("s") || ""}
+        onChange={(event) => {
+          dispatch({
+            type: "inputStringChange",
+            payload: event.currentTarget.value,
+          });
+        }}
       />
     </>
   );
