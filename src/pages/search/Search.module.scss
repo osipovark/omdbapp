@@ -2,15 +2,48 @@
 
 @import "../../styles/variables";
 
+.searchControls {
+  margin-top: 2.4rem;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 1fr auto;
+}
+
 .searchStringInput {
-  padding: 0.8rem 1.2em;
+  padding: 0.8rem 0.8rem;
   background-color: #1e4f62;
   color: $text-color;
   border: none;
   border-radius: 1.6rem;
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 .searchStringInput::placeholder {
   color: darken($text-color, 20%);
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.6rem;
+  background-color: #1e4f62;
+  color: $text-color;
+  transition: background-color 0.1s ease-in-out;
+
+  @media (hover: none) {
+    background-color: $secondary-color;
+  }
+}
+
+.btn:hover {
+  background-color: $secondary-color;
+}
+
+.advancedSearchBtn {
+  width: 3.2rem;
+
+  & svg {
+    width: 80%;
+  }
 }
