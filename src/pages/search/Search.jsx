@@ -13,8 +13,11 @@ const key = "ab7333ba";
 
 function Search() {
   const [movies, setMovies] = useState([]);
+  const [pageBtnsVisibility, setPageBtnsVisibility] = useState(false);
   const [searchParams, dispatch, totalResultsRef] = useParamsReducer();
   const paramsString = searchParams.toString();
+
+  const isPaged = totalResultsRef.current > 10;
 
   useEffect(() => {
     console.log(paramsString);
@@ -40,7 +43,7 @@ function Search() {
 
   return (
     <>
-      <div className={styles.searchControls}>
+      <div className={`${styles.searchControls}`}>
         <input
           className={styles.searchStringInput}
           type="search"
@@ -54,13 +57,45 @@ function Search() {
             });
           }}
         />
-        <button className={`${styles.btn} ${styles.advancedSearchBtn}`}>
+        <button
+          className={`
+            ${styles.btn}
+            ${styles.controlBtn}
+            ${styles.pageBtnsBtn}
+          `}
+          disabled={!isPaged}
+          tabIndex={`${!isPaged ? -1 : 0}`}
+          onClick={() => setPageBtnsVisibility(!pageBtnsVisibility)}
+        >
+          <Icons.ArrowsRightLeftIcon />
+        </button>
+        <button
+          className={`${styles.btn} ${styles.controlBtn} ${styles.advancedSearchBtn}`}
+        >
           <Icons.AdjustmentsHorizontalIcon />
         </button>
       </div>
       <section className={styles.searchResults}>
         <MoviesList movies={movies} />
       </section>
+      <div
+        className={`${styles.pageBtns} ${
+          isPaged && pageBtnsVisibility ? styles.active : ""
+        }`}
+      >
+        <button
+          className={`${styles.pageBtn} ${styles.btn}`}
+          onClick={() => dispatch({ type: "prevPageBtnClick" })}
+        >
+          <Icons.ArrowLeftIcon />
+        </button>
+        <button
+          className={`${styles.pageBtn} ${styles.btn}`}
+          onClick={() => dispatch({ type: "nextPageBtnClick" })}
+        >
+          <Icons.ArrowRightIcon />
+        </button>
+      </div>
     </>
   );
 }
