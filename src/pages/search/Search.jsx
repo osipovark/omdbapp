@@ -14,6 +14,8 @@ const key = "ab7333ba";
 function Search() {
   const [movies, setMovies] = useState([]);
   const [pageBtnsVisibility, setPageBtnsVisibility] = useState(false);
+  const [advancedSearchFormVisibility, setAdvancedSearchFormVisibility] =
+    useState(false);
   const [searchParams, dispatch, totalResultsRef] = useParamsReducer();
   const paramsString = searchParams.toString();
 
@@ -71,16 +73,71 @@ function Search() {
         </button>
         <button
           className={`${styles.btn} ${styles.controlBtn} ${styles.advancedSearchBtn}`}
+          onClick={() => {
+            setAdvancedSearchFormVisibility(!advancedSearchFormVisibility);
+          }}
         >
           <Icons.AdjustmentsHorizontalIcon />
         </button>
+        <form
+          className={`${styles.advancedSearchForm} ${
+            advancedSearchFormVisibility ? styles.visible : styles.hidden
+          }`}
+        >
+          <div className={styles.field}>
+            <label htmlFor="yearInput" className={styles.label}>
+              Year:
+            </label>
+            <input
+              className={styles.yearInput}
+              type="number"
+              name="year"
+              id="yearInput"
+              onChange={(event) =>
+                dispatch({
+                  type: "inputYearChange",
+                  payload: event.currentTarget.value,
+                })
+              }
+            />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="typeInput" className={styles.label}>
+              Type:
+            </label>
+            <select
+              className={styles.typeInput}
+              name="type"
+              id="typeInput"
+              onChange={(event) =>
+                dispatch({
+                  type: "selectTypeChange",
+                  payload: event.currentTarget.value,
+                })
+              }
+            >
+              <option value="" className={styles.typeOption}>
+                --Choose the type--
+              </option>
+              <option value="movie" className={styles.typeOption}>
+                movie
+              </option>
+              <option value="series" className={styles.typeOption}>
+                series
+              </option>
+              <option value="episode" className={styles.typeOption}>
+                episode
+              </option>
+            </select>
+          </div>
+        </form>
       </div>
       <section className={styles.searchResults}>
         <MoviesList movies={movies} />
       </section>
       <div
         className={`${styles.pageBtns} ${
-          isPaged && pageBtnsVisibility ? styles.active : ""
+          isPaged && pageBtnsVisibility ? styles.visible : styles.hidden
         }`}
       >
         <button
